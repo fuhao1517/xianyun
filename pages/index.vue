@@ -31,8 +31,9 @@
 
           <!-- 输入框 -->
           <el-row type="flex" align="middle" class="search-input">
-            <input :placeholder="options[current].placeholder" />
-            <i class="el-icon-search"></i>
+            <input :placeholder="options[current].placeholder" @keyup.enter="handleSearch" />
+
+            <i class="el-icon-search" @click="handleSearch"></i>
           </el-row>
         </div>
       </div>
@@ -49,19 +50,24 @@ export default {
       options: [
         {
           title: "攻略",
-          placeholder: "搜索城市"
+          placeholder: "搜索城市",
+          pageUrl: "/post?city="
         },
         {
           title: "酒店",
-          placeholder: "请输入城市搜索酒店"
+          placeholder: "请输入城市搜索酒店",
+          pageUrl: "/hotel?city="
         },
         {
           title: "机票",
-          placeholder: ""
+          placeholder: "",
+          pageUrl: "/air"
         }
       ],
       /* tab栏的索引 */
-      current: 0
+      current: 0,
+      /* 输入框的值 */
+      searchValue:"",
     };
   },
   methods: {
@@ -72,6 +78,13 @@ export default {
       if (index === 2) {
         this.$router.push("/air");
       }
+    },
+    /* 搜索事件 */
+    handleSearch() {
+      const item = this.options[this.current];
+
+      /* 跳转时候给对应的页面url加上搜索内容参数 */
+      this.$router.push(item.pageUrl + this.searchValue);
     }
   },
   /* 请求轮播图数据 */
@@ -80,7 +93,6 @@ export default {
       url: "/scenics/banners"
     }).then(res => {
       const { data } = res.data;
-
       /* 赋值给banners */
       this.banners = data;
     });
