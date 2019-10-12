@@ -31,6 +31,21 @@
 <script>
 export default {
   data() {
+    // 确认密码的校验的方法
+    // rule: 当前的规则，一般是用不上这个参数
+    // value: 输入框的值
+    // callback: 回调函数。该函数必须要调用，调用时候可以传递错误的对象信息
+    var validatePass = (rule, value, callback) => {
+      if (value === "") {
+        // new Error js原生的错误对象
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.form.password) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        // 验证通过
+        callback();
+      }
+    };
     return {
       // 表单数据
       form: {
@@ -72,8 +87,7 @@ export default {
         ],
         passwordRepeat: [
           {
-            required: true,
-            message: "请再次输入密码",
+            validator: validatePass,
             trigger: "blur"
           }
         ]
