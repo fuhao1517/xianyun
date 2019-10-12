@@ -96,11 +96,46 @@ export default {
   },
   methods: {
     // 发送验证码
-    handleSendCaptcha() {},
+    async handleSendCaptcha() {
+      if (!this.form.username) {
+        this.$message.error("手机号码不能为空");
+        return;
+      }
+      const res = await this.$axios({
+        url: "/captchas",
+        method: "POST",
+        data: {
+          tel: this.form.username //手机号码
+        }
+      });
+      const { code } = res.data;
+      this.$message.success(`验证码是:${code}`);
+    },
 
     // 注册
     handleRegSubmit() {
-      console.log(this.form);
+      this.$refs.form.validate(async valid => {
+        if (valid) {
+          // props是form里面除了checkPassword以外的属性
+          const { passwordRepeat, ...props } = this.form;
+          const res = await this.$axios({
+            url: "/accounts/register",
+            method: "POST",
+            data: props
+          });
+
+          if (res.status === 200) {
+            this.$message.success("注册成功");
+          }
+          this.$router.push("/");
+          const data = res.data;
+          /* 把用户信息token保存到本地，在头部组件中显示用户数据 */
+          /* vuex不能通过直接赋值的方式修改state的值 */
+          /* 通过调用mutation下的方法修改掉state的值，commit方法调用mutation的方法 */
+          /* 非常类似于$emit */
+          this.$store.commit("user/setUserInfo", data);
+        }
+      });
     }
   }
 };
