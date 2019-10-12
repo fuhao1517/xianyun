@@ -49,6 +49,12 @@ export default {
             this.$message.success("登录成功");
           }
           this.$router.push("/");
+          const data = res.data;
+          /* 把用户信息token保存到本地，在头部组件中显示用户数据 */
+          /* vuex不能通过直接赋值的方式修改state的值 */
+          /* 通过调用mutation下的方法修改掉state的值，commit方法调用mutation的方法 */
+          /* 非常类似于$emit */
+          this.$store.commit("user/setUserInfo", data);
         }
       });
     }
