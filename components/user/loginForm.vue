@@ -37,7 +37,20 @@ export default {
   methods: {
     // 提交登录
     handleLoginSubmit() {
-      console.log(this.form);
+      this.$refs.form.validate(async valid => {
+        if (valid) {
+          const res = await this.$axios({
+            url: "/accounts/login",
+            method: "POST",
+            data: this.form
+          });
+
+          if (res.status === 200) {
+            this.$message.success("登录成功");
+          }
+          this.$router.push("/");
+        }
+      });
     }
   }
 };
