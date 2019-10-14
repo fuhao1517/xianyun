@@ -1,3 +1,7 @@
+import {
+  async
+} from "q";
+
 // 固定的写法，暴露出state
 export const state = () => {
   return {
@@ -24,9 +28,33 @@ export const actions = {
     });
 
     if (res.status === 200) {
-      store.commit("setUserInfo", res.data)
-      return res;
+      store.commit("setUserInfo", res.data);
     }
+    return res;
+  },
+  /* 发送手机验证码, tel是传入的手机号码 */
+  async sendCaptcha(store, tel) {
+    const res = await this.$axios({
+      url: "/captchas",
+      method: "POST",
+      data: {
+        tel //手机号码
+      }
+    })
+    return res;
+  },
+  /* 封装注册的方法 */
+  async register(store, props) {
 
-  }
+    const res = await this.$axios({
+      url: "/accounts/register",
+      method: "POST",
+      data: props
+    });
+
+    if (res.status === 200) {
+      store.commit("setUserInfo", res.data);
+    }
+    return res;
+  },
 };
