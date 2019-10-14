@@ -21,6 +21,7 @@
           :fetch-suggestions="queryDepartSearch"
           placeholder="请搜索出发城市"
           @select="handleDepartSelect"
+          v-model="form.departCity"
           class="el-autocomplete"
         ></el-autocomplete>
       </el-form-item>
@@ -30,6 +31,7 @@
           :fetch-suggestions="queryDestSearch"
           placeholder="请搜索到达城市"
           @select="handleDestSelect"
+          v-model="form.destCity"
           class="el-autocomplete"
         ></el-autocomplete>
       </el-form-item>
@@ -81,15 +83,27 @@ export default {
     // cb:回调函数，必须要调用，调用时候必须要传递一个数组的参数，
     // 数组中的元素必须是一个对象，对象中必须要有value属性
     queryDepartSearch(value, cb) {
+      /* 输入框为空时候不请求 */
+      if (!value) return;
       /* 请求搜索建议城市 */
-      
+      this.$axios({
+        url: "/airs/city?name=" + value
+      }).then(res => {
+        /* data是后台返回的城市数组,没有value属性 */
+        const { data } = res.data;
+        /* 循环每一项加上value属性*/
+        const newData = data.map(v => {
+          v.value = v.name.replace("市", "");
+          return v;
+        });
+        /* 展示到下拉列表 */
+        cb(newData);
+      });
     },
 
     // 目标城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
-    queryDestSearch(value, cb) {
-      
-    },
+    queryDestSearch(value, cb) {},
 
     // 出发城市下拉选择时触发
     handleDepartSelect(item) {},
@@ -104,9 +118,7 @@ export default {
     handleReverse() {},
 
     // 提交表单是触发
-    handleSubmit() {
-      
-    }
+    handleSubmit() {}
   },
   mounted() {}
 };
