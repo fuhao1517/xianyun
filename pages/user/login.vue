@@ -33,7 +33,7 @@ import RegisterForm from "@/components/user/RegisterForm";
 export default {
   data() {
     return {
-      current: 1
+      current: 0
     };
   },
   /* 注册组件 */

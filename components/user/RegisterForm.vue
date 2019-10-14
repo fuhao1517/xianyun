@@ -108,6 +108,7 @@ export default {
           tel: this.form.username //手机号码
         }
       });
+
       const { code } = res.data;
       this.$message.success(`验证码是:${code}`);
     },

@@ -57,7 +57,8 @@ export default {
     {
       src: '@/plugins/localStorage.js',
       ssr: false
-    }
+    },
+    '@/plugins/axios' // 调用插件
   ],
 
   /*
