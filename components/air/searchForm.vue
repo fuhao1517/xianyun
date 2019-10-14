@@ -15,8 +15,8 @@
 
     <el-form class="search-form-content" ref="form" label-width="80px">
       <el-form-item label="出发城市">
-        <!-- fetch-suggestions 返回输入建议的方法 -->
-        <!-- select 点击选中建议项时触发 -->
+        <!-- fetch-suggestions: 类似于input方法，每次输入框值发生变化时候会触发 -->
+        <!-- select：选中下拉列表中的值的时候触发的触发  -->
         <el-autocomplete
           :fetch-suggestions="queryDepartSearch"
           placeholder="请搜索出发城市"
@@ -24,6 +24,7 @@
           class="el-autocomplete"
         ></el-autocomplete>
       </el-form-item>
+
       <el-form-item label="到达城市">
         <el-autocomplete
           :fetch-suggestions="queryDestSearch"
@@ -32,13 +33,16 @@
           class="el-autocomplete"
         ></el-autocomplete>
       </el-form-item>
+
       <el-form-item label="出发时间">
         <!-- change 用户确认选择日期时触发 -->
         <el-date-picker type="date" placeholder="请选择日期" style="width: 100%;" @change="handleDate"></el-date-picker>
       </el-form-item>
+
       <el-form-item label>
         <el-button style="width:100%;" type="primary" icon="el-icon-search" @click="handleSubmit">搜索</el-button>
       </el-form-item>
+
       <div class="reverse">
         <span @click="handleReverse">换</span>
       </div>
@@ -54,23 +58,37 @@ export default {
         { icon: "iconfont icondancheng", name: "单程" },
         { icon: "iconfont iconshuangxiang", name: "往返" }
       ],
-      currentTab: 0
+      currentTab: 0,
+
+      /* 最终表单要提交的属性 */
+      form: {
+        departCity: "", // 出发城市
+        departCode: "", // 出发城市代码
+        destCity: "", // 到达城市
+        destCode: "", // 到达城市代码
+        departDate: "" // 日期字符串
+      }
     };
   },
   methods: {
     // tab切换时触发
-    handleSearchTab(item, index) {},
+    handleSearchTab(item, index) {
+      this.currentTab = index;
+    },
 
-    // 出发城市输入框获得焦点时触发
-    // value 是选中的值，cb是回调函数，接收要展示的列表
+    // 出发城市输入框值发生变化时候会触发
+    // value：输入框的值
+    // cb:回调函数，必须要调用，调用时候必须要传递一个数组的参数，
+    // 数组中的元素必须是一个对象，对象中必须要有value属性
     queryDepartSearch(value, cb) {
-      cb([{ value: 1 }, { value: 2 }, { value: 3 }]);
+      /* 请求搜索建议城市 */
+      
     },
 
     // 目标城市输入框获得焦点时触发
     // value 是选中的值，cb是回调函数，接收要展示的列表
     queryDestSearch(value, cb) {
-      cb([{ value: 1 }, { value: 2 }, { value: 3 }]);
+      
     },
 
     // 出发城市下拉选择时触发
@@ -86,7 +104,9 @@ export default {
     handleReverse() {},
 
     // 提交表单是触发
-    handleSubmit() {}
+    handleSubmit() {
+      
+    }
   },
   mounted() {}
 };
