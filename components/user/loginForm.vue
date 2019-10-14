@@ -38,23 +38,15 @@ export default {
     // 提交登录
     handleLoginSubmit() {
       this.$refs.form.validate(async valid => {
+        // valid是表单验证的结果
         if (valid) {
-          const res = await this.$axios({
-            url: "/accounts/login",
-            method: "POST",
-            data: this.form
-          });
+          /* this.$store.dispath用于调运actions的方法 */
+          const res = await this.$store.dispatch("user/login", this.form);
 
           if (res.status === 200) {
             this.$message.success("登录成功");
           }
           this.$router.push("/");
-          const data = res.data;
-          /* 把用户信息token保存到本地，在头部组件中显示用户数据 */
-          /* vuex不能通过直接赋值的方式修改state的值 */
-          /* 通过调用mutation下的方法修改掉state的值，commit方法调用mutation的方法 */
-          /* 非常类似于$emit */
-          this.$store.commit("user/setUserInfo", data);
         }
       });
     }
