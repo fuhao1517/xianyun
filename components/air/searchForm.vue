@@ -16,7 +16,7 @@
     <el-form class="search-form-content" ref="form" label-width="80px">
       <el-form-item label="出发城市">
         <!-- fetch-suggestions: 类似于input方法，每次输入框值发生变化时候会触发 -->
-        <!-- select：选中下拉列表中的值的时候触发的触发  -->
+        <!-- select：选中下拉列表中的值的时候触发  -->
         <el-autocomplete
           :fetch-suggestions="queryDepartSearch"
           placeholder="请搜索出发城市"
@@ -84,7 +84,11 @@ export default {
     // 数组中的元素必须是一个对象，对象中必须要有value属性
     queryDepartSearch(value, cb) {
       /* 输入框为空时候不请求 */
-      if (!value) return;
+      if (!value) {
+        /* 不显示下拉框 */
+        cb([]);
+        return;
+      }
       /* 请求搜索建议城市 */
       this.$axios({
         url: "/airs/city?name=" + value
@@ -106,7 +110,11 @@ export default {
     queryDestSearch(value, cb) {},
 
     // 出发城市下拉选择时触发
-    handleDepartSelect(item) {},
+    handleDepartSelect(item) {
+      /* 获取到表单需要的机票信息 */
+      this.form.departCity = item.value;
+      this.form.departCode = item.sort;
+    },
 
     // 目标城市下拉选择时触发
     handleDestSelect(item) {},
@@ -117,8 +125,10 @@ export default {
     // 触发和目标城市切换时触发
     handleReverse() {},
 
-    // 提交表单是触发
-    handleSubmit() {}
+    // 提交表单时触发
+    handleSubmit() {
+      console.log(this.form);
+    }
   },
   mounted() {}
 };
