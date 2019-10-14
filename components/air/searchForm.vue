@@ -21,6 +21,7 @@
           :fetch-suggestions="queryDepartSearch"
           placeholder="请搜索出发城市"
           @select="handleDepartSelect"
+          @blur="handleDepartBlur"
           v-model="form.departCity"
           class="el-autocomplete"
         ></el-autocomplete>
@@ -69,7 +70,9 @@ export default {
         destCity: "", // 到达城市
         destCode: "", // 到达城市代码
         departDate: "" // 日期字符串
-      }
+      },
+      /* 存放newData的城市的数组 */
+      cities: []
     };
   },
   methods: {
@@ -100,9 +103,19 @@ export default {
           v.value = v.name.replace("市", "");
           return v;
         });
+        /* 把newData赋值给data中cities */
+        this.cities = newData;
         /* 展示到下拉列表 */
         cb(newData);
       });
+    },
+    /* 出发城市失去焦点时候默认选中第一个 */
+    handleDepartBlur() {
+      /* 默认选中城市列表第一个 */
+      if(this.cities.length>0){
+        this.form.departCity=this.cities[0].value;
+        this.form.departCode=this.cities[0].sort;
+      }
     },
 
     // 目标城市输入框获得焦点时触发
@@ -122,7 +135,7 @@ export default {
     // 确认选择日期时触发
     handleDate(value) {},
 
-    // 触发和目标城市切换时触发
+    // 出发城市和目标城市切换时触发
     handleReverse() {},
 
     // 提交表单时触发
