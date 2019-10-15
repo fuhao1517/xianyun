@@ -14,7 +14,7 @@
               <span>{{item.org_airport_name}} {{item.org_airport_quay}}</span>
             </el-col>
             <el-col :span="8" class="flight-time">
-              <span>2时20分</span>
+              <span>{{rankTime}}</span>
             </el-col>
             <el-col :span="8" class="flight-airport">
               <strong>{{item.arr_time}}</strong>
@@ -61,6 +61,29 @@
 
 <script>
 export default {
+  computed: {
+    rankTime() {
+      const arrTime = this.item.arr_time.split(":");
+      const depTime = this.item.dep_time.split(":");
+
+      /* 第二天 */
+      if (arrTime[0] < depTime[0]) {
+        arrTime[0] += 24;
+      }
+      /* 到达时间的分钟 */
+      const arr = arrTime[0] * 60 + +arrTime[1];
+      /* 出发时间的分钟 */
+      const dep = depTime[0] * 60 + +depTime[1];
+      /* 相隔的分钟 */
+      const dis = arr - dep;
+
+      /* 小时 */
+      const hours = Math.floor(dis / 60);
+      /* 分钟 */
+      const min = dis % 60;
+      return `${hours}小时${min}分钟`;
+    }
+  },
   /* props除了可以使用数组之外，还可以使用对象 */
   props: {
     // item是声明组件可以接受item属性
