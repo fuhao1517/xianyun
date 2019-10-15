@@ -10,7 +10,17 @@
         <FlightsListHead />
 
         <!-- 航班信息 -->
-        <FlightsItem v-for="(item,index) in flightsData.flights" :key="index" :item="item" />
+        <!-- flightsData.flights是航班的列表 -->
+        <FlightsItem v-for="(item,index) in dataList" :key="index" :item="item" />
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageIndex"
+          :page-sizes="[5, 10, 15, 20]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="flightsData.total"
+        ></el-pagination>
       </div>
 
       <!-- 侧边栏 -->
@@ -29,12 +39,37 @@ export default {
   data() {
     return {
       // 请求机票列表返回的总数据，包含了flights,info, options,total
-      flightsData: {}
+      flightsData: {},
+      /* 从filght总列表中切割出来的数组列表 */
+      dataList: [],
+      /*当前的页数 */
+      pageIndex: 1,
+      /* 当前页面的条数 */
+      pageSize: 5
     };
   },
   components: {
     FlightsListHead,
     FlightsItem
+  },
+  methods: {
+    // 分页条数切换时候触发, val是当前的条数
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    // 页数切换时候触发, val是当前的页数
+    handleCurrentChange(val) {
+      /* 修改当前的页数 */
+      this.pageIndex = val;
+      /* 修改机票列表 */
+      // 0, 5
+      // 5, 10
+      // 10, 15
+      this.dataList = this.flightsData.flights.slice(
+        (this.pageIndex - 1) * this.pageSize,
+        this.pageIndex * this.pageSize
+      );
+    }
   },
   mounted() {
     this.$axios({
@@ -44,6 +79,8 @@ export default {
     }).then(res => {
       // 保存到机票的总数据
       this.flightsData = res.data;
+      /* 第一页的数据 */
+      this.dataList = this.flightsData.flights.slice(0, this.pageSize);
     });
   }
 };
