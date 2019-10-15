@@ -12,7 +12,9 @@
         <!-- 航班信息 -->
         <!-- flightsData.flights是航班的列表 -->
         <FlightsItem v-for="(item,index) in dataList" :key="index" :item="item" />
+        <!-- v-if 如果有数据就显示，如果没有数据就不显示 -->
         <el-pagination
+          v-if="flightsData.flights.length"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="pageIndex"
@@ -21,6 +23,12 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="flightsData.total"
         ></el-pagination>
+
+        <!-- loading等于false表示加载完毕之后才显示 -->
+        <div
+          v-if="flightsData.flights.length===0&&!loading"
+          style="padding:50px; text-align:center"
+        >该航班暂无数据</div>
       </div>
 
       <!-- 侧边栏 -->
@@ -46,7 +54,9 @@ export default {
       /*当前的页数 */
       pageIndex: 1,
       /* 当前页面的条数 */
-      pageSize: 5
+      pageSize: 5,
+      /* 判断是否正在加载 */
+      loading: true
     };
   },
   computed: {
@@ -95,6 +105,8 @@ export default {
       this.flightsData = res.data;
       //   /* 第一页的数据 */
       //   this.dataList = this.flightsData.flights.slice(0, this.pageSize);
+      /* 请求完毕 */
+      this.loading = false;
     });
   }
 };
