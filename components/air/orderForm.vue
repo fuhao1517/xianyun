@@ -103,7 +103,24 @@ export default {
     },
 
     // 发送手机验证码
-    handleSendCaptcha() {},
+    async handleSendCaptcha() {
+      // 判断是否有手机号码
+      if (!this.contactPhone) {
+        this.$message.error("请输入手机号码");
+        return;
+      }
+      /* dispatch返回的是promise */
+      //   this.$store.dispatch("user/sendCaptcha", this.contactPhone).then(res => {
+      //     this.$message.success("当前的验证码为:" + res.data.code);
+      //   });
+
+      /* 使用await的方式来调用 */
+      const res = await this.$store.dispatch(
+        "user/sendCaptcha",
+        this.contactPhone
+      );
+      this.$message.success("当前的验证码为:" + res.data.code);
+    },
 
     // 提交订单
     handleSubmit() {
@@ -116,7 +133,6 @@ export default {
         seat_xid: this.$route.query.seat_xid,
         air: this.$route.query.id
       };
-      console.log(data);
     },
     // 选择保险时候触发，// id就是保险的id
     handleChange(id) {
@@ -129,7 +145,6 @@ export default {
         /* 没有存在 */
         this.insurances.push(id);
       }
-      //   console.log(this.insurances);
     }
   },
   mounted() {
