@@ -120,26 +120,37 @@ export default {
       //     (this.pageIndex - 1) * this.pageSize,
       //     this.pageIndex * this.pageSize
       //   );
+    },
+    /* 获取机票的列表 */
+    getList() {
+      this.$axios({
+        url: "/airs",
+        /*  params是axios的get的参数 */
+        params: this.$route.query
+      }).then(res => {
+        console.log(res.data);
+        // 保存到机票的总数据
+        this.flightsData = res.data;
+        /* 赋值多一份给缓存的对象,一旦赋值之后不能再被修改 */
+        this.cacheFlightsData = { ...res.data };
+        //   /* 第一页的数据 */
+        //   this.dataList = this.flightsData.flights.slice(0, this.pageSize);
+        /* 请求完毕 */
+        this.loading = false;
+        /* 分页总数 */
+        this.total = this.flightsData.total;
+      });
+    }
+  },
+  watch: {
+    /* 监听路由 */
+    $route() {
+      /* 请求机票列表数据 */
+      this.getList();
     }
   },
   mounted() {
-    this.$axios({
-      url: "/airs",
-      /*  params是axios的get的参数 */
-      params: this.$route.query
-    }).then(res => {
-      console.log(res.data);
-      // 保存到机票的总数据
-      this.flightsData = res.data;
-      /* 赋值多一份给缓存的对象,一旦赋值之后不能再被修改 */
-      this.cacheFlightsData = { ...res.data };
-      //   /* 第一页的数据 */
-      //   this.dataList = this.flightsData.flights.slice(0, this.pageSize);
-      /* 请求完毕 */
-      this.loading = false;
-      /* 分页总数 */
-      this.total = this.flightsData.total;
-    });
+    this.getList();
   }
 };
 </script>
