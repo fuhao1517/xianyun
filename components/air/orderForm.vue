@@ -47,11 +47,11 @@
       <div class="contact">
         <el-form label-width="60px">
           <el-form-item label="姓名">
-            <el-input></el-input>
+            <el-input v-model="contactName"></el-input>
           </el-form-item>
 
           <el-form-item label="手机">
-            <el-input placeholder="请输入内容">
+            <el-input v-model="contactPhone" placeholder="请输入内容">
               <template slot="append">
                 <el-button @click="handleSendCaptcha">发送验证码</el-button>
               </template>
@@ -59,7 +59,7 @@
           </el-form-item>
 
           <el-form-item label="验证码">
-            <el-input></el-input>
+            <el-input v-model="captcha"></el-input>
           </el-form-item>
         </el-form>
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
@@ -81,7 +81,11 @@ export default {
       /* 机票数据 */
       detail: {},
       /* 保险数据 */
-      insurances: []
+      insurances: [],
+      contactName: "", // 联系人
+      contactPhone: "", // 联系电话
+      captcha: "", // 验证码
+      invoice: false // 发票，写死
     };
   },
   methods: {
@@ -102,7 +106,18 @@ export default {
     handleSendCaptcha() {},
 
     // 提交订单
-    handleSubmit() {},
+    handleSubmit() {
+      const data = {
+        users: this.users,
+        insurances: this.insurances,
+        contactName: this.contactName,
+        contactPhone: this.contactPhone,
+        invoice: this.invoice,
+        seat_xid: this.$route.query.seat_xid,
+        air: this.$route.query.id
+      };
+      console.log(data);
+    },
     // 选择保险时候触发，// id就是保险的id
     handleChange(id) {
       /* 需要判断保险数组中是否存在，如果存在要删除，不存在就添加 */
