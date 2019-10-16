@@ -127,7 +127,7 @@ export default {
         (this.flightTimes = ""), // 出发时间
         (this.company = ""), // 航空公司
         (this.airSize = ""); // 机型大小
-      /* 修改列表数据的 */
+      /* 传递没有修改的列表数据 */
       this.$emit("setDataList", this.data.flights);
     }
   }
