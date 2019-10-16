@@ -23,7 +23,7 @@
           :page-sizes="[5, 10, 15, 20]"
           :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="flightsData.total"
+          :total="total"
         ></el-pagination>
 
         <!-- loading等于false表示加载完毕之后才显示 -->
@@ -70,7 +70,9 @@ export default {
       /* 当前页面的条数 */
       pageSize: 5,
       /* 判断是否正在加载 */
-      loading: true
+      loading: true,
+      /* 分页条数 */
+      total: 0
     };
   },
   computed: {
@@ -91,7 +93,11 @@ export default {
   methods: {
     // 给过滤组件修改flightsData的flights
     setDataList(arr) {
+      /* 根据过滤条件修改列表 */
       this.flightsData.flights = arr;
+      /* 修改分页的初始值 */
+      this.total = arr.length;
+      this.pageIndex = 1;
     },
     // 分页条数切换时候触发, val是当前的条数
     handleSizeChange(val) {
@@ -121,7 +127,6 @@ export default {
       params: this.$route.query
     }).then(res => {
       console.log(res.data);
-
       // 保存到机票的总数据
       this.flightsData = res.data;
       /* 赋值多一份给缓存的对象,一旦赋值之后不能再被修改 */
@@ -130,6 +135,8 @@ export default {
       //   this.dataList = this.flightsData.flights.slice(0, this.pageSize);
       /* 请求完毕 */
       this.loading = false;
+      /* 分页总数 */
+      this.total = this.flightsData.total;
     });
   }
 };
