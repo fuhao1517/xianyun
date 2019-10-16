@@ -6,7 +6,7 @@
         <!-- 过滤条件 -->
         <!-- data 是不会被修改的列表数据 -->
         <!-- setDataList 用于修改过滤后的数组列表 -->
-        <FlightsFilters :data="flightsData" @setDataList="setDataList" />
+        <FlightsFilters :data="cacheFlightsData" @setDataList="setDataList" />
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -51,6 +51,14 @@ export default {
     return {
       // 请求机票列表返回的总数据，包含了flights,info, options,total
       flightsData: {
+        /* 初始值 */
+        flights: [],
+        info: {},
+        options: {}
+      },
+      /* 声明多一份总数据，`该总数据一旦赋值之后不会再被修改`，
+      也就是第一次赋值完后的值等于flightsData */
+      cacheFlightsData: {
         /* 初始值 */
         flights: [],
         info: {},
@@ -116,6 +124,8 @@ export default {
 
       // 保存到机票的总数据
       this.flightsData = res.data;
+      /* 赋值多一份给缓存的对象,一旦赋值之后不能再被修改 */
+      this.cacheFlightsData = { ...res.data };
       //   /* 第一页的数据 */
       //   this.dataList = this.flightsData.flights.slice(0, this.pageSize);
       /* 请求完毕 */
