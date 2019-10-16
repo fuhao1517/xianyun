@@ -4,7 +4,9 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <FlightsFilters :data="flightsData" />
+        <!-- data 是不会被修改的列表数据 -->
+        <!-- setDataList 用于修改过滤后的数组列表 -->
+        <FlightsFilters :data="flightsData" @setDataList="setDataList" />
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -54,6 +56,7 @@ export default {
         info: {},
         options: {}
       },
+
       /*当前的页数 */
       pageIndex: 1,
       /* 当前页面的条数 */
@@ -78,6 +81,10 @@ export default {
     FlightsFilters
   },
   methods: {
+    // 给过滤组件修改flightsData的flights
+    setDataList(arr) {
+      this.flightsData.flights = arr;
+    },
     // 分页条数切换时候触发, val是当前的条数
     handleSizeChange(val) {
       /* 修改当前的条数 */
