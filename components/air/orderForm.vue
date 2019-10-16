@@ -51,7 +51,7 @@
           </el-form-item>
 
           <el-form-item label="手机">
-            <el-input v-model="contactPhone" placeholder="请输入内容">
+            <el-input v-model="contactPhone" placeholder="请输入手机号码">
               <template slot="append">
                 <el-button @click="handleSendCaptcha">发送验证码</el-button>
               </template>
@@ -129,6 +129,7 @@ export default {
         insurances: this.insurances,
         contactName: this.contactName,
         contactPhone: this.contactPhone,
+        captcha: this.captcha,
         invoice: this.invoice,
         seat_xid: this.$route.query.seat_xid,
         air: this.$route.query.id
@@ -137,8 +138,15 @@ export default {
       this.$axios({
         url: "/airorders",
         method: "POST",
-        data
+        data,
+        headers: {
+          // 这是jwt标准的token
+          Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
+        }
       }).then(res => {
+        // if (res.statusCode === 400) {
+        //   this.$message.error("111");
+        // }
         console.log(res);
       });
     },

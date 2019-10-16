@@ -14,9 +14,12 @@ export default (context) => {
       message,
       statusCode
     } = res.response.data;
+
     if (statusCode === 400) {
-      Message.erroe(message)
+      Message.error(message)
     }
+
+
     if (statusCode === 403) {
       /* 路由重定向的方法 */
       context.redirect("/user/login")
