@@ -105,7 +105,6 @@ export default {
       price += this.insurances.length * 30;
       /* 人数 */
       price *= this.users.length;
-
       /* 把总价格传递给父组件 */
       this.$emit("getAllPrice", price);
       return price;
@@ -178,7 +177,18 @@ export default {
           // 这是jwt标准的token
           Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
         }
-      }).then(res => {});
+      }).then(res => {
+        const { data, message } = res.data;
+        this.$message.success(message);
+
+        /* 跳转到付款页 */
+        this.$router.push({
+          path: "/air/pay",
+          query: {
+            id: data.id
+          }
+        });
+      });
     }
   },
   mounted() {
@@ -191,7 +201,6 @@ export default {
       }
     }).then(res => {
       this.detail = res.data;
-      console.log(this.detail);
 
       /* 把detail返回给父组件 */
       this.$emit("getDetail", this.detail);
