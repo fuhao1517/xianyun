@@ -89,6 +89,10 @@ export default {
         }
       }, 3000);
     }, 10);
+  },
+  /* 生命周期 */
+  destroyed(){
+    clearInterval(this.time)
   }
 };
 </script>
