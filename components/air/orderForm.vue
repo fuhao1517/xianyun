@@ -101,6 +101,18 @@ export default {
     handleDeleteUser(index) {
       this.users.splice(index, 1);
     },
+    // 选择保险时候触发，// id就是保险的id
+    handleChange(id) {
+      /* 需要判断保险数组中是否存在，如果存在要删除，不存在就添加 */
+      const index = this.insurances.indexOf(id);
+      if (index > -1) {
+        /* 已经存在 */
+        this.insurances.splice(index, 1);
+      } else {
+        /* 没有存在 */
+        this.insurances.push(id);
+      }
+    },
 
     // 发送手机验证码
     async handleSendCaptcha() {
@@ -143,35 +155,21 @@ export default {
           // 这是jwt标准的token
           Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
         }
-      }).then(res => {
-        // if (res.statusCode === 400) {
-        //   this.$message.error("111");
-        // }
-        console.log(res);
-      });
-    },
-    // 选择保险时候触发，// id就是保险的id
-    handleChange(id) {
-      /* 需要判断保险数组中是否存在，如果存在要删除，不存在就添加 */
-      const index = this.insurances.indexOf(id);
-      if (index > -1) {
-        /* 已经存在 */
-        this.insurances.splice(index, 1);
-      } else {
-        /* 没有存在 */
-        this.insurances.push(id);
-      }
+      }).then(res => {});
     }
   },
   mounted() {
+    /*获取飞机票的数据 */
     const { id, seat_xid } = this.$route.query;
     this.$axios({
       url: "/airs/" + id,
-      prams: {
+      params: {
         seat_xid
       }
     }).then(res => {
       this.detail = res.data;
+      /* 把detail返回给父组件 */
+      this.$emit("getDetail", this.detail);
     });
   }
 };

@@ -62,6 +62,8 @@
 </template>
 
 <script>
+/* 导入计算的方法 */
+import { computedTime } from "@/utils/utils";
 export default {
   data() {
     return {
@@ -70,25 +72,7 @@ export default {
   },
   computed: {
     rankTime() {
-      const arrTime = this.item.arr_time.split(":");
-      const depTime = this.item.dep_time.split(":");
-
-      /* 第二天 */
-      if (arrTime[0] < depTime[0]) {
-        arrTime[0] += 24;
-      }
-      /* 到达时间的分钟 */
-      const arr = arrTime[0] * 60 + +arrTime[1];
-      /* 出发时间的分钟 */
-      const dep = depTime[0] * 60 + +depTime[1];
-      /* 相隔的分钟 */
-      const dis = arr - dep;
-
-      /* 小时 */
-      const hours = Math.floor(dis / 60);
-      /* 分钟 */
-      const min = dis % 60;
-      return `${hours}小时${min}分钟`;
+      return computedTime(this.item.arr_time, this.item.dep_time);
     }
   },
   /* props除了可以使用数组之外，还可以使用对象 */
