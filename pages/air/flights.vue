@@ -128,8 +128,6 @@ export default {
         /*  params是axios的get的参数 */
         params: this.$route.query
       }).then(res => {
-        console.log(res.data);
-        
         // 保存到机票的总数据
         this.flightsData = res.data;
         /* 赋值多一份给缓存的对象,一旦赋值之后不能再被修改 */
