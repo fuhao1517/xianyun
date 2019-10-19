@@ -1,11 +1,6 @@
 <template>
-  <div>
+  <div style="padding:50px;">
     酒店模块首页
-    <!-- <script
-      type="text/javascript"
-      src="https://webapi.amap.com/maps?v=1.4.15&key=fd675b2c65d8924ae177ad3e95a75406"
-    ></script>-->
-    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=fd675b2c65d8924ae177ad3e95a75406"></script>
     <div id="container"></div>
   </div>
 </template>
@@ -13,9 +8,11 @@
 <script>
 export default {
   mounted() {
+    /* 整个页面加载完毕之后执行 */
     window.onLoad = function() {
       var map = new AMap.Map("container");
     };
+    /* 地图的连接 */
     var url =
       "https://webapi.amap.com/maps?v=1.4.15&key=fd675b2c65d8924ae177ad3e95a75406&callback=onLoad";
     var jsapi = document.createElement("script");
